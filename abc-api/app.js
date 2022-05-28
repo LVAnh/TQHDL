@@ -1,9 +1,15 @@
 import express from 'express'
 import morgan from 'morgan'
+import categoryRouter from './routes/category.route.js'
+import auth from "./middlewares/auth.mdw.js";
 
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
+
+// app.use('/api/categories', auth, categoryRouter);
+app.use('/api/categories', categoryRouter);
+
 
 app.get('/', function (req, res) {
     res.json({
