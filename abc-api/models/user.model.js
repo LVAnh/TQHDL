@@ -9,8 +9,4 @@ userModel.findByUsername = async function (username) {
     }
     return rows[0]
 }
-userModel.isValidRefreshToken = async function (userId, refreshToken) {
-    const rows = await db('users').where('user_id',userId).andWhere('rfToken',refreshToken);
-    return rows.length !== 0
-}
 export default userModel

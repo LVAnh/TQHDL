@@ -12,8 +12,7 @@ CREATE TABLE `users` (
   `level` INTEGER DEFAULT 0,
   `age` INTEGER DEFAULT 0,
   `gender` varchar(45) DEFAULT NULL,
-  `rfToken` varchar(255) DEFAULT NULL,
-  `shop_id` smallint(5) unsigned NOT NULL,
+  `shop_id` smallint(5) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   KEY `idx_fk_shop_id` (`shop_id`),
   CONSTRAINT `fk_user_shop` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`shop_id`) ON UPDATE CASCADE
@@ -82,6 +81,7 @@ CREATE TABLE `products` (
   `phone` varchar(20) DEFAULT NULL,
   `specification` varchar(255) DEFAULT NULL,
   `quantity` INTEGER DEFAULT 1,
+  `sales` INTEGER DEFAULT 0,
   `origin` varchar(255) DEFAULT NULL,
   `import_time` DATE DEFAULT NULL,
   `dom` DATE DEFAULT NULL,
@@ -105,9 +105,18 @@ CREATE TABLE `orders` (
   `delivery_date` DATE DEFAULT NULL,
   `date_of_receipt` DATE DEFAULT NULL,
   PRIMARY KEY (`order_id`),
-  CONSTRAINT `fk_order_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk_order_customer` FOREIGN KEY (`customer_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE
+  CONSTRAINT `fk_order_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_order_customer` FOREIGN KEY (`customer_id`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+
+BEGIN;
+INSERT INTO `users` VALUES (1, 'shop', "","shop", "", "", 1, 20, "",NULL);
+COMMIT;
+
+BEGIN;
+INSERT INTO `shops` VALUES (1, 'Shop Xanh', "227, Nguyễn Văn Cừ, Q5, HCM","0123456789", "Tèo", NULL, 0, 1,NULL);
+COMMIT;
+
 
 BEGIN;
 INSERT INTO `categories` VALUES (1, 'Thịt, Cá, Trứng, Hải sản');
@@ -124,6 +133,11 @@ INSERT INTO `categories` VALUES (11, 'Vệ sinh nhà cửa');
 INSERT INTO `categories` VALUES (12, 'Mẹ và bé');
 INSERT INTO `categories` VALUES (13, 'Khác');
 COMMIT;
+
+
+SELECT * FROM `products`;
+
+SELECT order_id,customer_id as buyer_id,product_id,username as buyer_username,`name` as buyer_name, address as buyer_address,phone as buyer_phone, age as buyer_age, gender as buyer_gender,quantity,price, order_date, delivery_date, date_of_receipt FROM orders INNER JOIN users on orders.customer_id=users.user_id
 
 
 
